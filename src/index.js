@@ -9,8 +9,7 @@ const popupTypeEdit = document.querySelector('.popup_type_edit');
 const popupTypeNewCard = document.querySelector('.popup_type_new-card');
 const placesList = document.querySelector('.places__list');
 const popupTypeImage = document.querySelector('.popup_type_image');
-const popupEvt = document.querySelectorAll('.popup');
-const profileEditButton = document.querySelector('.profile__edit-button');
+const popups = document.querySelectorAll('.popup');
 const popupForm = popupTypeEdit.querySelector('.popup__form');
 const popupInputTypeName = popupForm.querySelector('.popup__input_type_name');
 const popupInputTypeDescription = popupForm.querySelector('.popup__input_type_description');
@@ -39,7 +38,7 @@ function openImage(name, link) {
 }
 
 // Функция закрытия Модальных окон
-popupEvt.forEach(function (popup) {
+popups.forEach(function (popup) {
   popup.classList.add('popup_is-animated');
 
   popup.addEventListener('click', (evt) => {
@@ -53,7 +52,7 @@ popupEvt.forEach(function (popup) {
 });
 
 // Обработчик «отправки» формы
-function handleFormSubmit(evt) {
+function handleProfileFormSubmit(evt) {
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
 
   const nameInput = popupInputTypeName.value;
@@ -66,12 +65,12 @@ function handleFormSubmit(evt) {
 }
 
 // Pедактирование профиля
-function formEdit() {
-  const profileTitle = document.querySelector('.profile__title').textContent;
-  const profileDescription = document.querySelector('.profile__description').textContent;
+function OpenProfileEditForm() {
+  const nameInput = profileTitle.textContent;
+  const jobInput = profileDescription.textContent;
 
-  popupInputTypeName.value = profileTitle;
-  popupInputTypeDescription.value = profileDescription;
+  popupInputTypeName.value = nameInput;
+  popupInputTypeDescription.value = jobInput;
 }
 
 // Функция добавления новых карточек
@@ -89,9 +88,9 @@ function handleCardSubmit(evt) {
 }
 // Прикрепляем обработчик к форме:
 // он будет следить за событием “submit” - «отправка»
-popupForm.addEventListener('submit', handleFormSubmit);
+popupForm.addEventListener('submit', handleProfileFormSubmit);
 formElement.addEventListener('submit', handleCardSubmit);
-profileEditButton.addEventListener('click', formEdit);
+profileEeditButton.addEventListener('click', OpenProfileEditForm);
 
 // Вывести карточки на страницу
 initialCards.forEach((data) => placesList.append(createCard(data.name, data.link, deleteCard, openImage, likeCard)));
