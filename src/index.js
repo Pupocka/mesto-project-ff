@@ -2,6 +2,7 @@ import '../src/pages/index.css';
 import { initialCards } from './components/cards.js';
 import { openModal, closeModal} from './components/modal.js';
 import { createCard, deleteCard, likeCard} from './components/card.js';
+import { enableValidation, validationConfig } from './components/validation.js';
 
 const profileEeditButton = document.querySelector('.profile__edit-button');
 const profileAddButton = document.querySelector('.profile__add-button');
@@ -17,7 +18,9 @@ const formElement = popupTypeNewCard.querySelector('.popup__form');
 const cardName = formElement.querySelector('.popup__input_type_card-name');
 const cardLink = formElement.querySelector('.popup__input_type_url');
 const profileTitle = document.querySelector('.profile__title');  
-const profileDescription = document.querySelector('.profile__description'); 
+const profileDescription = document.querySelector('.profile__description');
+
+enableValidation(validationConfig);
 
 // Открытие и закрытие модального окна
 profileEeditButton.addEventListener('click', function () {
