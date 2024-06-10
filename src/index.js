@@ -2,7 +2,7 @@ import '../src/pages/index.css';
 import { initialCards } from './components/cards.js';
 import { openModal, closeModal} from './components/modal.js';
 import { createCard, deleteCard, likeCard} from './components/card.js';
-import { enableValidation, validationConfig } from './components/validation.js';
+import { enableValidation, validationConfig, clearValidation } from './components/validation.js';
 
 const profileEeditButton = document.querySelector('.profile__edit-button');
 const profileAddButton = document.querySelector('.profile__add-button');
@@ -20,15 +20,15 @@ const cardLink = formElement.querySelector('.popup__input_type_url');
 const profileTitle = document.querySelector('.profile__title');  
 const profileDescription = document.querySelector('.profile__description');
 
-enableValidation(validationConfig);
-
 // Открытие и закрытие модального окна
 profileEeditButton.addEventListener('click', function () {
+  clearValidation(popupForm, validationConfig);
   openModal(popupTypeEdit);
 });
 
 profileAddButton.addEventListener('click', function () {
-  openModal(popupTypeNewCard);
+  clearValidation(formElement, validationConfig, true);
+   openModal(popupTypeNewCard);
 });
 
 // Функция открытия картинки
@@ -97,3 +97,5 @@ profileEeditButton.addEventListener('click', OpenProfileEditForm);
 
 // Вывести карточки на страницу
 initialCards.forEach((data) => placesList.append(createCard(data.name, data.link, deleteCard, openImage, likeCard)));
+
+enableValidation(validationConfig);

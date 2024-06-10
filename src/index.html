@@ -57,7 +57,7 @@
               pattern="^[a-zA-zа-яёА-ЯЁ\-\s]+$"
               data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
             />
-            <span class="form__input-error name-input-error"></span>
+            <span class="pupop_input-error name-input-error"></span>
             <input
               id="description-input"
               type="text"
@@ -70,7 +70,7 @@
               pattern="^[a-zA-zа-яёА-ЯЁ\-\s]+$"
               data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
             />
-            <span class="form__input-error description-input-error"></span>
+            <span class="popup__input-error description-input-error"></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
@@ -85,7 +85,7 @@
           <h3 class="popup__title">Новое место</h3>
           <form class="popup__form" name="new-place" novalidate>
             <input
-              id="place-name"
+              id="new-name"
               type="text"
               name="place-name"
               class="popup__input popup__input_type_card-name"
@@ -96,7 +96,7 @@
               data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
               pattern="^[a-zA-zа-яёА-ЯЁ\-\s]+$"
             />
-            <span class="form__input-error place-name-error"></span>
+            <span class="popup__input-error new-name-error"></span>
             <input
               id="place-link"
               type="url"
@@ -105,7 +105,7 @@
               placeholder="Ссылка на картинку"
               required
             />
-            <span class="form__input-error place-link-error"></span>
+            <span class="popup__input-error place-link-error"></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>

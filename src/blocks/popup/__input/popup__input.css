@@ -25,7 +25,7 @@
   border-bottom-color: red;
 } 
 
-.form__input-error{
+.popup__input-error{
   font-weight: 400;
   font-size: 12px;
   color: #f00;
