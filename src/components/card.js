@@ -1,11 +1,10 @@
-import { openModal, closeModal} from './modal'
-import { apiDeleteCard } from './api'
+import { likeCard } from './api'
 
 // Функция создания карточки
 export const createCard = (
-  cardData, 
-  callback,
-  likeCallback,
+  cardData,
+  apiDeleteCard,
+  handleLike,
   imageCallback,
   userId
 ) => {
@@ -16,8 +15,6 @@ export const createCard = (
   const likeCount = cardElement.querySelector('.card__like-count');
   const cardTitle = cardElement.querySelector('.card__title');
   const cardImage = cardElement.querySelector('.card__image');
-  const modalDelete = document.querySelector('.popup_type_delete');
-  const deleteForm = modalDelete.querySelector('.popup__form');
 
   cardImage.src = cardData.link;
   cardImage.alt = cardData.name;
@@ -33,27 +30,23 @@ export const createCard = (
   } else {
     deleteButton.style.display = 'none';
   }
-   
-  deleteButton.addEventListener('click', () => {
-    openModal(modalDelete);
-    deleteForm.onsubmit = (event) => {
-      event.preventDefault();
-      apiDeleteCard(cardData._id)
-        .then(() => {
-          callback(cardElement);
-          closeModal(modalDelete);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    };
+  
+  deleteButton.addEventListener('click', (evt) => {
+    apiDeleteCard(cardData._id)
+      .then(() => {
+        const card = evt.target.closest('.card');
+        card.remove();
+      })
+      .catch(err => {
+        console.log(err);
+      });
   });
 
   likeButton.addEventListener('click', function () {
     const isLiked = likeButton.classList.contains(
       'card__like-button_is-active'
     );
-    likeCallback(likeButton, cardData._id, isLiked, likeCount);
+    handleLike(likeButton, cardData._id, isLiked, likeCount);
   });
 
   cardImage.addEventListener('click', function () {
@@ -63,7 +56,15 @@ export const createCard = (
   return cardElement;
 };
 
-// Функция удаления карточки
-export function deleteCard(card) {
-  card.remove();
+//Лайк
+export function handleLike(likeButton, cardId, isLiked, likeCountElement) {
+  likeCard(cardId, isLiked)
+  .then((updatedCard) => {
+    const updatedLikes = updatedCard.likes.length;
+    likeButton.classList.toggle('card__like-button_is-active', !isLiked);
+    likeCountElement.textContent = updatedLikes;
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 };

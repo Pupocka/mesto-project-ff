@@ -50,10 +50,8 @@ export const createNewCard = (name, link) => {
 
  // Функция вызова API для удаления карточки
 export function apiDeleteCard(cardId) {
-  const url = `${config.baseUrl}/cards/${cardId}`;
-
-  return fetch(url, {
-    method: "DELETE",
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
+    method: 'DELETE',
     headers: config.headers,
   }).then(checkResponse);
 }
@@ -61,7 +59,7 @@ export function apiDeleteCard(cardId) {
 // Функция для отправки нового аватара на сервер
 export const updateAvatar = (newAvatar) => {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
-    method: "PATCH",
+    method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
       avatar: newAvatar,
@@ -73,7 +71,7 @@ export const updateAvatar = (newAvatar) => {
 // Функция обработки лайка
 export function likeCard(cardId, isLiked) {
   return fetch(`${config.baseUrl}/cards/${cardId}/likes`, {
-    method: isLiked ? "DELETE" : "PUT",
+    method: isLiked ? 'DELETE' : 'PUT',
     headers: config.headers
   })
     .then(checkResponse);

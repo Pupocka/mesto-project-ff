@@ -1,8 +1,8 @@
 import '../src/pages/index.css';
 import { openModal, closeModal } from './components/modal.js';
-import { createCard, deleteCard } from './components/card.js';
-import { enableValidation, validationConfig, clearValidation } from './components/validation.js';
-import { getCards, getUser, updateUser, createNewCard, updateAvatar, likeCard } from './components/api.js'
+import { createCard, handleLike } from './components/card.js';
+import { enableValidation, clearValidation } from './components/validation.js';
+import { getCards, getUser, updateUser, createNewCard, updateAvatar, apiDeleteCard } from './components/api.js'
 
 const profileEeditButton = document.querySelector('.profile__edit-button');
 const profileAddButton = document.querySelector('.profile__add-button');
@@ -23,15 +23,14 @@ const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 const profileImage = document.querySelector('.profile__image');
 
-//Лайк
-function handleLike(likeButton, cardId, isLiked, likeCountElement) {
-  likeCard(cardId, isLiked)
-  .then((updatedCard) => {
-    const updatedLikes = updatedCard.likes.length;
-    likeButton.classList.toggle('card__like-button_is-active', !isLiked);
-    likeCountElement.textContent = updatedLikes;
-  });
-}
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error'
+};
 
 // Функция закрытия Модальных окон
 popups.forEach(function (popup) {
@@ -68,7 +67,6 @@ function openModalEdit(
 }
 
 profileEeditButton.addEventListener('click', function () {
-  clearValidation(popupTypeEdit, validationConfig);
   openModal(popupTypeEdit);
   openModalEdit(
     popupTypeEdit,
@@ -131,13 +129,14 @@ function handleCardSubmit(evt) {
 
   const placeName = formElement.elements['place-name'].value;
   const placeLink = formElement.elements['link'].value;
-
+  const form = evt.target;
+  setButtonState(form, true, 'Сохранение...');
   createNewCard( placeName, placeLink )
   .then((cardData) => {
     placesList.prepend(
       createCard(
         cardData,
-        deleteCard,
+        apiDeleteCard,
         handleLike,
         openImage,
         cardData.owner._id,
@@ -150,6 +149,7 @@ function handleCardSubmit(evt) {
 .catch(err => {
   console.log(err);
 })
+.finally(() => setButtonState(form, false, 'Сохранить'));
 }
 
 // Прикрепляем обработчик к форме
@@ -173,7 +173,7 @@ Promise.all([getUser(), getCards()])
 function displayCards(cards, userId) {
   cards.forEach(function (cardData) {
     placesList.append(
-      createCard(cardData, deleteCard, handleLike, openImage, userId)
+      createCard(cardData, apiDeleteCard, handleLike, openImage, userId)
     );
   });
 }
@@ -182,18 +182,18 @@ function displayCards(cards, userId) {
 function handleUpdateAvatarSubmit(evt) {
   evt.preventDefault();
 
-  setButtonState(evt.target, true, "Сохранение...");
+  setButtonState(evt.target, true, 'Сохранение...');
   updateAvatar(modalAvatar.querySelector('input[name="link"]').value)
     .then((data) => {
       profileImage.style.backgroundImage = `url(${data.avatar})`;
       closeModal(modalAvatar);
     })
     .catch((err) => {
-      console.error("Ошибка при обновлении аватара:", err);
+      console.error('Ошибка при обновлении аватара:', err);
     })
-    .finally(() => setButtonState(evt.target, false, "Сохранить"));
+    .finally(() => setButtonState(evt.target, false, 'Сохранить'));
 }
 
-avatarForm.addEventListener("submit", handleUpdateAvatarSubmit);
+avatarForm.addEventListener('submit', handleUpdateAvatarSubmit);
 
 enableValidation(validationConfig);
